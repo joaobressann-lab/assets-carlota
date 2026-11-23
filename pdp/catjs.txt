@@ -1,0 +1,20 @@
+for(let i=0;i<60&&![...document.querySelectorAll('button')].some(b=>b.innerText.trim()==='Adicionar'||b.innerText.trim()==='Editar');i++)await new Promise(r=>setTimeout(r,500));
+await new Promise(r=>setTimeout(r,1000));
+const pid=location.pathname.split('/').pop();
+const cats=await fetch('https://raw.githubusercontent.com/joaobressann-lab/assets-carlota/main/pdp/lote7-cats.json').then(r=>r.json());
+const want=cats[pid];
+const sec=[...document.querySelectorAll('button')].filter(b=>['Adicionar','Editar'].includes(b.innerText.trim()));
+const btn=sec.find(b=>{let p=b;for(let i=0;i<6;i++){p=p.parentElement;if(p.innerText.includes('Para facilitar')||p.innerText.startsWith('Categorias'))return true}return false})||sec[0];
+btn.click();
+for(let i=0;i<20&&!document.querySelector('input[name="36439452"]');i++)await new Promise(r=>setTimeout(r,300));
+const inv={};for(const c of document.querySelectorAll('input[type=checkbox]')){if(!/^\d+$/.test(c.name))continue;let r=c.parentElement;for(let i=0;i<5&&r&&r.innerText.trim().length<2;i++)r=r.parentElement;const v=r.innerText.replace(/\n+/g,' ').replace(' Oculta','').replace('/ ','/').trim();if(!(v in inv))inv[v]=c};
+const miss=want.filter(p=>!inv[p]);
+for(const p of want){if(inv[p]&&!inv[p].checked)inv[p].click()}
+await new Promise(r=>setTimeout(r,600));
+const ok=want.every(p=>inv[p]&&inv[p].checked);
+document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+await new Promise(r=>setTimeout(r,800));
+const sv=[...document.querySelectorAll('button')].find(b=>b.innerText.trim()==='Salvar alterações');
+if(sv)sv.click();
+await new Promise(r=>setTimeout(r,3500));
+return pid+' ok:'+ok+' miss:'+miss.join(',')+' saved:'+!!sv
